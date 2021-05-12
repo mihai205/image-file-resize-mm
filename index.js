@@ -24,6 +24,7 @@ module.exports = function({ file, width, height, type }) {
           const img = new Image();
           img.src = event.target.result;
           (img.onload = () => {
+            console.log(img);
             const elem = document.createElement("canvas");
             elem.width = imgWidth;
             elem.height = imgHeight;
