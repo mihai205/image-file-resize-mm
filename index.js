@@ -1,4 +1,4 @@
-module.exports = function({ file, width, height, type }) {
+module.exports = function({ file, width, height, type, ratio }) {
   return new Promise(function(resolve, reject) {
     let allow = ["jpg", "gif", "bmp", "png", "jpeg"];
     try {
@@ -15,8 +15,8 @@ module.exports = function({ file, width, height, type }) {
         file.type
       ) {
         let imageType = type ? type : "jpeg";
-        const imgWidth = width ? width : 500;
-        const imgHeight = height ? height : 300;
+        let imgWidth = width ? width : 500;
+        let imgHeight = height ? height : 300;
         const fileName = file.name;
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -24,7 +24,17 @@ module.exports = function({ file, width, height, type }) {
           const img = new Image();
           img.src = event.target.result;
           (img.onload = () => {
-            console.log(img);
+            console.log({ img });
+
+            if (ratio && img.height && img.width) {
+              if (ratio === "w") {
+                imgHeight = (img.height * imgWidth) / img.width;
+              }
+              if (ratio === "h") {
+                imgWidth = (img.width * imgHeight) / img.height;
+              }
+            }
+
             const elem = document.createElement("canvas");
             elem.width = imgWidth;
             elem.height = imgHeight;
