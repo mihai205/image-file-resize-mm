@@ -24,17 +24,19 @@ module.exports = function({ file, width, height, type, ratio }) {
           const img = new Image();
           img.src = event.target.result;
           (img.onload = () => {
-            console.log({ image: img });
-
             if (ratio && img.height && img.width) {
-              if (ratio === "w") {
-                imgHeight = (img.height * imgWidth) / img.width;
-              }
               if (ratio === "h") {
                 imgWidth = (img.width * imgHeight) / img.height;
+              } else if (ratio === "w") {
+                imgHeight = (img.height * imgWidth) / img.width;
+              } else {
+                if (img.height > img.width) {
+                  imgWidth = (imgHeight / img.height) * img.width;
+                } else {
+                  imgHeight = (imgWidth / img.width) * img.height;
+                }
               }
             }
-
             const elem = document.createElement("canvas");
             elem.width = imgWidth;
             elem.height = imgHeight;
