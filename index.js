@@ -24,7 +24,7 @@ module.exports = function({ file, width, height, type, ratio }) {
           const img = new Image();
           img.src = event.target.result;
           (img.onload = () => {
-            console.log({ img });
+            console.log({ image: img });
 
             if (ratio && img.height && img.width) {
               if (ratio === "w") {
