@@ -12,11 +12,13 @@ module.exports = function ({ file, width, height, type, ratio, nameAppend }) {
         let imageType = type ? type : "jpeg";
         let imgWidth = width ? width : 500;
         let imgHeight = height ? height : 300;
-        const fileName =
-          file.name.split(".").pop().join(".") +
-          (nameAppend ? "-" + nameAppend : "") +
-          "." +
-          imageType;
+
+        let fileName = file.name;
+        if (nameAppend) {
+          fileName.split(".").pop();
+          fileName.join(".") + "-" + nameAppend + "." + imageType;
+        }
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (event) => {
