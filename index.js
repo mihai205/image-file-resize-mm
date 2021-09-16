@@ -1,26 +1,25 @@
-module.exports = function({ file, width, height, type, ratio }) {
-  return new Promise(function(resolve, reject) {
+module.exports = function ({ file, width, height, type, ratio, nameAppend }) {
+  return new Promise(function (resolve, reject) {
     let allow = ["jpg", "gif", "bmp", "png", "jpeg"];
     try {
       if (
         file.name &&
         file.name.split(".").pop() &&
-        allow.includes(
-          file.name
-            .split(".")
-            .pop()
-            .toLowerCase()
-        ) &&
+        allow.includes(file.name.split(".").pop().toLowerCase()) &&
         file.size &&
         file.type
       ) {
         let imageType = type ? type : "jpeg";
         let imgWidth = width ? width : 500;
         let imgHeight = height ? height : 300;
-        const fileName = file.name;
+        const fileName =
+          file.name.split(".").pop().join(".") +
+          (nameAppend ? "-" + nameAppend : "") +
+          "." +
+          imageType;
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = event => {
+        reader.onload = (event) => {
           const img = new Image();
           img.src = event.target.result;
           (img.onload = () => {
@@ -43,10 +42,10 @@ module.exports = function({ file, width, height, type, ratio }) {
             const ctx = elem.getContext("2d");
             ctx.drawImage(img, 0, 0, imgWidth, imgHeight);
             ctx.canvas.toBlob(
-              blob => {
+              (blob) => {
                 const file = new File([blob], fileName, {
                   type: `image/${imageType.toLowerCase()}`,
-                  lastModified: Date.now()
+                  lastModified: Date.now(),
                 });
                 resolve(file);
               },
@@ -54,7 +53,7 @@ module.exports = function({ file, width, height, type, ratio }) {
               1
             );
           }),
-            (reader.onerror = error => reject(error));
+            (reader.onerror = (error) => reject(error));
         };
       } else reject("File not supported!");
     } catch (error) {
