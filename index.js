@@ -15,8 +15,7 @@ module.exports = function ({ file, width, height, type, ratio, nameAppend }) {
 
         let fileName = file.name;
         if (nameAppend) {
-          fileName.split(".").pop();
-          fileName.join(".") + "-" + nameAppend + "." + imageType;
+          fileName = nameAppend + "-" + fileName;
         }
 
         const reader = new FileReader();
